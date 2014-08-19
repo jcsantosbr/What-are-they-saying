@@ -1,4 +1,4 @@
-var whatAreTheySaying = (function($, window){
+var whatAreTheySaying = (function($, window, chrome){
 
     var log = function() {
         var i;
@@ -70,6 +70,7 @@ var whatAreTheySaying = (function($, window){
         {name: "Reedit", searchUrl: "http://www.reddit.com/search.json?q=", parser: reeditNewsParser}
     ];
 
+    var intComparator = function(e1,e2) { return e1 - e2 };
 
     var find = function(url) {
 
@@ -77,16 +78,14 @@ var whatAreTheySaying = (function($, window){
 
         var encodedSearchedUrl = window.encodeURIComponent(url);
 
-        var intComparator = function(e1,e2) { return e1 - e2 };
-
         clearResults();
 
-        providers.map(function(source) {
-            log('query: ' + source.searchUrl + encodedSearchedUrl);
-            $.getJSON(source.searchUrl + encodedSearchedUrl, function(data) {
-                source.parser(data).sort(intComparator).forEach(function(post) {
+        providers.map(function(provider) {
+            log('query: ' + provider.searchUrl + encodedSearchedUrl);
+            $.getJSON(provider.searchUrl + encodedSearchedUrl, function(data) {
+                provider.parser(data).sort(intComparator).forEach(function(post) {
                     log('Post:', post);
-                    addResults(source.name + "(" + post.popularity + ")" , post.url);
+                    addResults(provider.name + "(" + post.popularity + ")" , post.url);
                 });
             });
         });
@@ -100,7 +99,7 @@ var whatAreTheySaying = (function($, window){
         }
     };
 
-})(jQuery, window);
+})(jQuery, window, chrome);
 
 
 document.addEventListener('DOMContentLoaded', function () {
