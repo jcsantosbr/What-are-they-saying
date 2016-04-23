@@ -1,4 +1,4 @@
 What-are-they-saying
 ====================
 
-Chrome pluging for searching discussions about the page you are reading 
+Chrome plugin for searching discussions about the page you are reading 
